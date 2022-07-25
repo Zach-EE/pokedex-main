@@ -40,14 +40,14 @@ INSTALLED_APPS = [
     
     'rest_framework',
     #local
-    'apis.apps.ApisConfig'
+    'apis.apps.ApisConfig',
     'pokemon.apps.PokemonConfig',
     'users.apps.UsersConfig',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':[
-        'rest+framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',
     ]
 }
 
