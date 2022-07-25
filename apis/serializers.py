@@ -4,9 +4,12 @@ from pokemon import models
 class PokemonSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
-            'name',
             'number',
+            'name',
+            'height',
+            'weight',
             'image_front',
             'image_back',
+            'caught_by',
         )
         model = models.Pokemon
