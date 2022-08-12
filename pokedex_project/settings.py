@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apis.apps.ApisConfig',
     'pokemon.apps.PokemonConfig',
     'users.apps.UsersConfig',
+    'pages.apps.PagesConfig',
 ]
 
 REST_FRAMEWORK = {
