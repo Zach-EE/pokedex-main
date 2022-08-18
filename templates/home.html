@@ -9,11 +9,18 @@
                 <p><a href="{% url 'logout' %}">Logout</a><p>
             </div>
         </nav>
-        <div class="container">
-            <div class="card" id="app">
-
+        <main class="container mt-10">
+            {% csrf_token %}
+            <div class="row d-flex justify-content-around" id="app">
+                <pokemon-card
+                    class="card-deck"
+                    v-for="pokemon in pokemon_list"
+                    :key="pokemon.id"
+                    :pokemon="pokemon"
+                >
+                </pokemon-card>
             </div>
-        </div>
+        </main>
     {% else %}
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
             <div class="navbar-item">
@@ -23,6 +30,6 @@
         </nav>
     {% endif %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-<script src="{% static "js/app.js"%}"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="{% static "js/app.js"%}">you should not be here</script>
 {% endblock content %}
