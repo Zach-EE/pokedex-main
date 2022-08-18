@@ -2,8 +2,8 @@ Vue.component('pokemon-card', {
   delimiters: ['[[', ']]'],
   props: ['pokemon'],
   template: `
-        <div class="card mt-2 mx-1 rounded border border-info" style="width: 18rem;">
-            <div class="card-header container-fluid">
+        <div class="card mt-2 mx-1 rounded border border-info" style="width: 21rem;">
+            <div class="card-header container-fluid d-flex justify-content-around">
                 <img class="rounded float-start mx-1 px-1" :src="pokemon.image_front" :alt="pokemon.name">
                 <img class="rounded float-end mx-1 px-1" :src="pokemon.image_back" :alt="pokemon.name">
             </div>
@@ -15,12 +15,12 @@ Vue.component('pokemon-card', {
                 <p class="card-text">Weight: [[ pokemon.weight ]]</p>
 
             </div>
-            <div class="card-footer btn-group d-flex justify-content-around" style="width: 18rem;">
-                <a href="#" class="btn btn-outline-success btn-sm btn-block float-start mr-1 w-100">
+            <div class="card-footer btn-group d-flex justify-content-around" style="width: 21rem;">
+                <a href="#" class="rounded btn btn-outline-success btn-sm btn-block float-start mr-1 w-100">
                     catch<br>[[pokemon.name]]
                 </a>
-                <a href="#" class="btn btn-outline-warning btn-sm float-none mx-1 w-100">edit<br>[[pokemon.name]]</a>
-                <a href="#" class="btn btn-outline-danger btn-sm btn-block ml-1 w-100">release<br>[[pokemon.name]]</a>
+                <a href="#" class="rounded btn btn-outline-warning btn-sm float-none mx-1 w-100">edit<br>[[pokemon.name]]</a>
+                <a href="#" class="rounded btn btn-outline-danger btn-sm btn-block ml-1 w-100">release<br>[[pokemon.name]]</a>
             </div>
         </div>
     `,
