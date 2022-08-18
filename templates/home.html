@@ -1,12 +1,35 @@
 {% extends "_base.html" %}
+{% load static %}
 
 {% block content %}
-{% if user.is_authenticated %}
-    <h2>Welcome to {{ user.username }} Pokedex!</h2>
-    <p><a href="{% url 'logout' %}">Logout</a><p>
-{% else %}
-    <h2>Welcome, visitor!</h2>
-    <p>You are not logged in. <a href="{% url 'login' %}">Login</a> <a href="{% url 'users:signup' %}">Sign Up</a></p>
-{% endif %}
-
+    {% if user.is_authenticated %}
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+            <div class="navbar-item">
+                <h2>Welcome to {{ user.username }}'s Pokedex!</h2>
+                <p><a href="{% url 'logout' %}">Logout</a><p>
+            </div>
+        </nav>
+        <main class="container mt-10">
+            {% csrf_token %}
+            <div class="row d-flex justify-content-around" id="app">
+                <pokemon-card
+                    class="card-deck"
+                    v-for="pokemon in pokemon_list"
+                    :key="pokemon.id"
+                    :pokemon="pokemon"
+                >
+                </pokemon-card>
+            </div>
+        </main>
+    {% else %}
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+            <div class="navbar-item">
+                <h2>Welcome, visitor!</h2>
+                <p>You are not logged in. <a href="{% url 'login' %}">Login</a> <a href="{% url 'users:signup' %}">Sign Up</a></p>
+            </div>
+        </nav>
+    {% endif %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="{% static "js/app.js"%}">you should not be here</script>
 {% endblock content %}

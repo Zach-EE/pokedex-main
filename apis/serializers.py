@@ -13,3 +13,12 @@ class PokemonSerializer(serializers.ModelSerializer):
             'caught_by',
         )
         model = models.Pokemon
+        
+
+class TypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            'type',
+            'pokemon',
+        )
+        model = models.Type
