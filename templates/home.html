@@ -1,37 +1,209 @@
-{% extends "_base.html" %}
-{% load static %}
+{% extends "_base.html" %} {% load static %} {% block content %}
 
-{% block content %}
-    {% if user.is_authenticated %}
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-            <div class="navbar-item">
-                <h2>Welcome to {{ user.username }}'s Pokedex!</h2>
-                <p><a href="{% url 'logout' %}">Logout</a><p>
+{% if user.is_authenticated %}
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+    <div class="navbar-item">
+        <h2>Welcome to {{ user.username }}'s Pokedex!</h2>
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+        <p></p>
+    </div>
+    </nav>
+    <main class="container mt-10">
+    {% csrf_token %}
+    <div class="" id="app">
+        <div class="row d-flex justify-content-around">
+            <div class="card mt-2 mx-1 rounded border border-info" style="width: 21rem;" v-for="item in catchPokemon" :key="item.id">
+                <div class="card-header container-fluid d-flex justify-content-around">
+                    <div class="position-absolute top-0 start-50 translate-middle">
+                        <img src="static/media/icons8-superball-48.png" alt="captured-pokeball">
+                    </div>
+                    <img class="rounded float-start mx-1 px-1" :src="item.image_front" :alt="item.name">
+                    <img class="rounded float-end mx-1 px-1" :src="item.image_back" :alt="item.name">
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title text-center">[[ item.name ]]</h4>
+                    <hr>
+                    <p class="card-text">Type: [[ item.height ]]</p>
+                    <p class="card-text">Height: [[ item.height ]]</p>
+                    <p class="card-text">Weight: [[ item.weight ]]</p>
+                </div>
+                <div class="card-footer btn-group d-flex justify-content-around" style="width: 21rem;">
+                    <a class="rounded btn btn-outline-success btn-sm btn-block float-start mr-1 w-100" @click.prevent="caughtPokemon(item)">catch<br>[[item.name]]</a>
+                    <a class="rounded btn btn-outline-warning btn-sm float-none mx-1 w-100" @click.prevent="releasedPokemon(item)">edit<br>[[item.name]]</a>
+                    <a class="rounded btn btn-outline-danger btn-sm btn-block ml-1 w-100" @click.prevent="releasedPokemon(item)">release<br>[[item.name]]</a>
+                </div> 
             </div>
-        </nav>
-        <main class="container mt-10">
-            {% csrf_token %}
-            <div class="row d-flex justify-content-around" id="app">
-                <pokemon-card
-                    class="card-deck"
-                    v-for="pokemon in pokemon_list"
-                    :key="pokemon.id"
-                    :pokemon="pokemon"
-                    @catch="catchPokemon(pokemon)"
-                    @release="releasePokemon(pokemon)"
-                >
-                </pokemon-card>
+        </div>
+        <div class="row d-flex justify-content-around">
+            <div class="card mt-2 mx-1 rounded border border-info" style="width: 21rem;" v-for="item in releasePokemon" :key="item.id">
+                <div class="card-header container-fluid d-flex justify-content-around">
+                    <img class="rounded float-start mx-1 px-1" :src="item.image_front" :alt="item.name">
+                    <img class="rounded float-end mx-1 px-1" :src="item.image_back" :alt="item.name">
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title text-center">[[ item.name ]]</h4>
+                    <hr>
+                    <p class="card-text">Type: [[ item.height ]]</p>
+                    <p class="card-text">Height: [[ item.height ]]</p>
+                    <p class="card-text">Weight: [[ item.weight ]]</p>
+                </div>
+                <div class="card-footer btn-group d-flex justify-content-around" style="width: 21rem;">
+                    <a class="rounded btn btn-outline-success btn-sm btn-block float-start mr-1 w-100" @click.prevent="caughtPokemon(item)">catch<br>[[item.name]]</a>
+                    <a class="rounded btn btn-outline-warning btn-sm float-none mx-1 w-100" @click.prevent="releasedPokemon(item)">edit<br>[[item.name]]</a>
+                    <a class="rounded btn btn-outline-danger btn-sm btn-block ml-1 w-100" @click.prevent="releasedPokemon(item)">release<br>[[item.name]]</a>
+                </div> 
             </div>
-        </main>
-    {% else %}
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-            <div class="navbar-item">
-                <h2>Welcome, visitor!</h2>
-                <p>You are not logged in. <a href="{% url 'login' %}">Login</a> <a href="{% url 'users:signup' %}">Sign Up</a></p>
+        </div>
+
+    </div>
+{% else %}
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+        <div class="navbar-item">
+        <h2>Welcome, visitor!</h2>
+        <p>
+            You are not logged in. <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'users:signup' %}">Sign Up</a>
+        </p>
+        </div>
+    </nav>
+    <h1>Welcome, visitor!</h1>
+    <p>
+        You are not logged in. <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'users:signup' %}">Sign Up</a>
+    </p>
+    <div class="row d-flex justify-content-around" id="app">
+        <div class="card mt-2 mx-1 rounded border border-info" style="width: 21rem;" v-for="item in pokemon_list" :key="item.id">
+            <div class="card-header container-fluid d-flex justify-content-around">
+                <img class="rounded float-start mx-1 px-1" :src="item.image_front" :alt="item.name">
+                <img class="rounded float-end mx-1 px-1" :src="item.image_back" :alt="item.name">
             </div>
-        </nav>
-    {% endif %}
+            <div class="card-body">
+                <h4 class="card-title text-center">[[ item.name ]]</h4>
+                <hr>
+                <p class="card-text">Type: [[ item.type ]]</p>
+                <p class="card-text">Height: [[ item.height ]]</p>
+                <p class="card-text">Weight: [[ item.weight ]]</p>
+            </div>
+
+        </div>
+    </div>
+{% endif %}
+    </main>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="{% static "js/app.js"%}">you should not be here</script>
+<script>
+  new Vue({
+    el: '#app',
+    delimiters: ['[[', ']]'],
+    data: {
+      pokemon_list: [],
+      csrfToken: '',
+      users: [],
+      activeUser: {},
+      caught: [],
+      uncaught: [],
+    },
+    methods: {
+      loadPokemon: function () {
+        console.log('loading pokemon');
+        axios({
+          method: 'get',
+          url: '/apis/v1/pokemon/',
+        }).then((response) => {
+          console.log(response.data);
+          this.pokemon_list = response.data;
+        });
+      },
+      loadUsers: function () {
+        console.log('loading users');
+        axios({
+          method: 'get',
+          url: '/apis/v1/users/',
+        }).then((response) => {
+          console.log(response.data);
+          this.users = response.data;
+        });
+      },
+      loadActiveUser: function () {
+        console.log('loading activeUser');
+        axios({
+          method: 'get',
+          url: '/apis/v1/activeuser/',
+        }).then((response) => {
+          console.log(response.data);
+          this.activeUser = response.data;
+        });
+      },
+      caughtPokemon: function (pokemon) {
+        this.activeUser.caught.push(pokemon.number);
+        axios({
+          method: 'patch',
+          url: `/apis/v1/activeuser/`,
+          headers: {
+            'X-CSRFToken': this.csrfToken,
+          },
+          data: {
+            caught: this.activeUser['caught'],
+          },
+        })
+          .then((response) => {
+            console.log(this.activeUser['caught']);
+
+            this.loadActiveUser();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+      releasedPokemon: function (pokemon) {
+        this.activeUser.caught.splice(
+          this.activeUser.caught.indexOf(pokemon.number),
+          1
+        );
+        axios({
+          method: 'patch',
+          url: `/apis/v1/activeuser/`,
+          headers: {
+            'X-CSRFToken': this.csrfToken,
+          },
+          data: {
+            caught: this.activeUser['caught'],
+          },
+        })
+          .then((response) => {
+            console.log(this.activeUser['caught'])
+            this.loadActiveUser();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+    },
+
+    created: function () {
+      this.loadPokemon();
+      this.loadUsers();
+      this.loadActiveUser();
+    },
+
+    computed: {
+      catchPokemon: function () {
+        return this.pokemon_list.filter((pokemon) => {
+          return this.activeUser['caught'].includes(pokemon.number);
+        });
+      },
+      releasePokemon: function () {
+        return this.pokemon_list.filter((pokemon) => {
+          return !this.activeUser['caught'].includes(pokemon.number);
+        });
+      },
+    },
+
+    mounted: function () {
+      this.csrfToken = document.querySelector(
+        'input[name=csrfmiddlewaretoken]'
+      ).value;
+    },
+  });
+</script>
 {% endblock content %}

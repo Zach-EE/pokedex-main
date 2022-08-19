@@ -25,3 +25,8 @@ class TypeViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    
+class ActiveUser(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CustomUserSerializer
+    def get_object(self):
+        return self.request.user

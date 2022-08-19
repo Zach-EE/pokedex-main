@@ -2,6 +2,7 @@ Vue.component('pokemon-card', {
   delimiters: ['[[', ']]'],
   props: ['pokemon'],
   template: `
+        <h2></h2
         <div class="card mt-2 mx-1 rounded border border-info" style="width: 21rem;">
             <div class="card-header container-fluid d-flex justify-content-around">
                 <img class="rounded float-start mx-1 px-1" :src="pokemon.image_front" :alt="pokemon.name">
@@ -16,19 +17,19 @@ Vue.component('pokemon-card', {
 
             </div>
             <div class="card-footer btn-group d-flex justify-content-around" style="width: 21rem;">
-                <a class="rounded btn btn-outline-success btn-sm btn-block float-start mr-1 w-100" @click.prevent="catchPokemon(pokemon)">
+                <a class="rounded btn btn-outline-success btn-sm btn-block float-start mr-1 w-100" @click.prevent="caughtPokemon(pokemon)">
                     catch<br>[[pokemon.name]]
                 </a>
                 <a class="rounded btn btn-outline-warning btn-sm float-none mx-1 w-100" @click.prevent="releasePokemon(pokemon)">edit<br>[[pokemon.name]]</a>
-                <a class="rounded btn btn-outline-danger btn-sm btn-block ml-1 w-100" @click.prevent="releasePokemon(pokemon)">release<br>[[pokemon.name]]</a>
+                <a class="rounded btn btn-outline-danger btn-sm btn-block ml-1 w-100" @click.prevent="releasedPokemon(pokemon)">release<br>[[pokemon.name]]</a>
             </div>
         </div>
     `,
   methods: {
-    catchPokemon: function (pokemon) {
-      this.$emit('catch', pokemon);
+    caughtPokemon: function (pokemon) {
+      this.$emit('caught', pokemon);
     },
-    releasePokemon: function (pokemon) {
+    releasedPokemon: function (pokemon) {
       this.$emit('release', pokemon);
     },
   },
@@ -42,6 +43,9 @@ const vm = new Vue({
     csrfToken: '',
     users: [],
     type: [],
+    activeUser: {},
+    caught: [],
+    released: [],
   },
   methods: {
     loadPokemon: function () {
@@ -64,30 +68,68 @@ const vm = new Vue({
         this.users = response.data;
       });
     },
-    catchPokemon: function (pokemon) {
-      console.log('catch ', pokemon.name);
-      let pokeID = 
+    loadActiveUser: function () {
+      console.log('loading activeUser');
+      axios({
+        method: 'get',
+        url: '/apis/v1/activeuser/',
+      }).then((response) => {
+        console.log(response.data);
+        this.activeUser = response.data;
+      });
+    },
+    caughtPokemon: function (pokemon) {
+      this.activeUser.caught.push(pokemon.number);
       axios({
         method: 'patch',
-        url: `/apis/v1/pokemon/${this.pokemon.id}/`,
+        url: `/apis/v1/activeuser/`,
         headers: {
-            'X-CSRFToken': this.csrfToken
-        }
-      }).then((response) => {
-        this.pokemon_list = response.data
-      }).catch((err)=>{
-        console.log(err)
+          'X-CSRFToken': this.csrfToken,
+        },
+        data: {
+          caught: this.activeUser.caught,
+          pokemon: this.pokemon,
+        },
       })
+        .then((response) => {
+          console.log(this.activeUser.caught);
+
+          this.loadActiveUser();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    releasePokemon: function (pokemon) {
-      console.log('release ', pokemon.name);
-      this.$emit('release', pokemon);
+    releasedPokemon: function (pokemon) {
+      this.activeUser.caught.splice(
+        this.activeUser.caught.indexOf(pokemon.number),
+        1
+      );
+      axios({
+        method: 'patch',
+        url: `/apis/v1/activeuser/`,
+        headers: {
+          'X-CSRFToken': this.csrfToken,
+        },
+        data: {
+          caught: this.activeUser.caught,
+          pokemon: this.pokemon,
+        },
+      })
+        .then((response) => {
+          this.loadActiveUser();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   created: function () {
-    this.loadPokemon()
-    this.loadUsers()
+    this.loadUsers();
+    this.loadActiveUser();
+    this.loadPokemon();
   },
+
   mounted() {
     this.csrfToken = document.querySelector(
       'input[name=csrfmiddlewaretoken]'
