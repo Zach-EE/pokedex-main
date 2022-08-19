@@ -37,7 +37,7 @@ const vm = new Vue ({
     },
     methods: {
         loadPokemon: function(){
-            console.log('loading')
+            console.log('loading pokemon')
             axios({
                 method: 'get',
                 url: '/apis/v1/pokemon/',
@@ -46,9 +46,20 @@ const vm = new Vue ({
                 this.pokemon_list = response.data
             })
         },
+        loadUsers: function(){
+            console.log('loading users');
+            axios({
+              method: 'get',
+              url: '/apis/v1/users/',
+            }).then((response) => {
+              console.log(response.data);
+              this.users = response.data;
+            });            
+        }
     },
     created: function () {
         this.loadPokemon()
+        this.loadUsers()
     },
     mounted() {
         this.csrfToken = document.querySelector("input[name=csrfmiddlewaretoken]").value

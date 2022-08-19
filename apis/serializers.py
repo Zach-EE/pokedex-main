@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from pokemon import models
+from users.models import CustomUser
+from pokemon.models import Pokemon, Type
 
 class PokemonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,7 +13,7 @@ class PokemonSerializer(serializers.ModelSerializer):
             'image_back',
             'caught_by',
         )
-        model = models.Pokemon
+        model = Pokemon
         
 
 class TypeSerializer(serializers.ModelSerializer):
@@ -21,4 +22,13 @@ class TypeSerializer(serializers.ModelSerializer):
             'type',
             'pokemon',
         )
-        model = models.Type
+        model = Type
+        
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            'id',
+            'caught',
+            'username'
+        )
+        model = CustomUser
