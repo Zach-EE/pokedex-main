@@ -17,6 +17,8 @@
                     v-for="pokemon in pokemon_list"
                     :key="pokemon.id"
                     :pokemon="pokemon"
+                    @catch="catchPokemon(pokemon)"
+                    @release="releasePokemon(pokemon)"
                 >
                 </pokemon-card>
             </div>
